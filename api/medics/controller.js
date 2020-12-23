@@ -15,4 +15,15 @@ async function getMedicos() {
     return medicosCollection;
   }
 
-  module.exports = { getMedicos };
+  async function pushMedico(medico) {
+    const mongoClient = await connection.getConnection();
+    const state = await mongoClient
+      .db(connection.clinicalRecordDb)
+      .collection(COLLECTION_NAME)
+      .insertOne(medico);
+    await mongoClient.close();
+  
+    return state;
+  }
+
+  module.exports = { getMedicos, pushMedico };
