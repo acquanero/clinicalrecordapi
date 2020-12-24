@@ -65,19 +65,29 @@ router.post('/', async (req, res) => {
 router.put('/activate', isAuthenticated, async (req, res) => {
 
   const { medicid } = req.body;
-
   const stateResponse = await MedicosController.activateMedic(medicid);
-
   var msgResponse = "";
 
   if (stateResponse.result.nModified == 0){
-
     msgResponse = "No user was activated";
-
   } else {
-
     msgResponse = "The user was activated";
+  }
 
+  res.send({"msg": msgResponse});
+
+});
+
+//Ruta para activar un medico (dar de alta)
+router.put('/deactivate', isAuthenticated, async (req, res) => {
+
+  const { medicid } = req.body;
+  const stateResponse = await MedicosController.deactivateMedic(medicid);
+  var msgResponse = "";
+  if (stateResponse.result.nModified == 0){
+    msgResponse = "No user was deactivated";
+  } else {
+    msgResponse = "The user was deactivated";
   }
 
   res.send({"msg": msgResponse});

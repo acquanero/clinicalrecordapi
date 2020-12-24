@@ -68,5 +68,25 @@ async function activateMedic(medicid) {
   return result;
 }
 
+async function deactivateMedic(medicid) {
 
-module.exports = { getMedics, pushMedic, checkMedicExistence, activateMedic};
+  const mongoClient = await connection.getConnection();
+
+  const query = { _id: new mongo.ObjectID(medicid) };
+  const newValue = {
+    $set: {
+      active: false
+    },
+  };
+
+  const result = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .updateOne(query, newValue);
+  await mongoClient.close();
+
+  return result;
+}
+
+
+module.exports = { getMedics, pushMedic, checkMedicExistence, activateMedic, deactivateMedic};
