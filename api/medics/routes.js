@@ -7,7 +7,7 @@ const MedicosController = require('./controller')
 //Ruta para obtener el listado de medicos
 router.get('/', isAuthenticated, async (req, res) => {
 
-    const medicos = await MedicosController.getMedicos();
+    const medicos = await MedicosController.getMedics();
     res.send(medicos);
 
 });
@@ -36,7 +36,7 @@ router.post('/', async (req, res) => {
 
     try {
 
-      const newMedic = await MedicosController.pushMedico({
+      const newMedic = await MedicosController.pushMedic({
         name,
         surname,
         mdNumber,
@@ -47,18 +47,41 @@ router.post('/', async (req, res) => {
       });
 
       res.status(201)
-      res.send({id: newMedic.ops[0]._id});
+      res.send({medicid: newMedic.ops[0]._id});
 
     } catch(e) {
 
       console.log(e);
 
       res.status(400)
-      res.send("Hubo un error")
+      res.send("There was an error while creating the user")
     }
 
   }
   
+});
+
+//Ruta para activar un medico (dar de alta)
+router.put('/activate', isAuthenticated, async (req, res) => {
+
+  const { medicid } = req.body;
+
+  const stateResponse = await MedicosController.activateMedic(medicid);
+
+  var msgResponse = "";
+
+  if (stateResponse.result.nModified == 0){
+
+    msgResponse = "No user was activated";
+
+  } else {
+
+    msgResponse = "The user was activated";
+
+  }
+
+  res.send({"msg": msgResponse});
+
 });
 
 

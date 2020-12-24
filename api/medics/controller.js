@@ -3,7 +3,7 @@ const connection = require('../../dbconnection/dbclient');
 
 const COLLECTION_NAME = 'medics'; // variable para no repetir la colección
 
-async function getMedicos() {
+async function getMedics() {
     const mongoClient = await connection.getConnection();
     const medicosCollection = await mongoClient
       .db(connection.clinicalRecordDb)
@@ -35,7 +35,7 @@ async function checkMedicExistence(wantedMail){
 
 }
 
-async function pushMedico(medico) {
+async function pushMedic(medico) {
 
   const mongoClient = await connection.getConnection();
 
@@ -48,5 +48,25 @@ async function pushMedico(medico) {
   return state;
 }
 
+async function activateMedic(medicid) {
 
-module.exports = { getMedicos, pushMedico, checkMedicExistence};
+  const mongoClient = await connection.getConnection();
+
+  const query = { _id: new mongo.ObjectID(medicid) };
+  const newValue = {
+    $set: {
+      active: true
+    },
+  };
+
+  const result = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .updateOne(query, newValue);
+  await mongoClient.close();
+
+  return result;
+}
+
+
+module.exports = { getMedics, pushMedic, checkMedicExistence, activateMedic};
