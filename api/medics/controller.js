@@ -15,15 +15,38 @@ async function getMedicos() {
     return medicosCollection;
   }
 
-  async function pushMedico(medico) {
-    const mongoClient = await connection.getConnection();
-    const state = await mongoClient
-      .db(connection.clinicalRecordDb)
-      .collection(COLLECTION_NAME)
-      .insertOne(medico);
-    await mongoClient.close();
-  
-    return state;
+async function checkMedicExistence(wantedMail){
+
+  const mongoClient = await connection.getConnection();
+
+  const medicWanted = await mongoClient
+  .db(connection.clinicalRecordDb)
+  .collection(COLLECTION_NAME)
+  .findOne({ mail: wantedMail });
+  await mongoClient.close();
+
+  if (medicWanted != null){
+    rta = true
+  } else {
+    rta = false
   }
 
-  module.exports = { getMedicos, pushMedico };
+  return rta;
+
+}
+
+async function pushMedico(medico) {
+
+  const mongoClient = await connection.getConnection();
+
+  const state = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .insertOne(medico);
+  await mongoClient.close();
+
+  return state;
+}
+
+
+module.exports = { getMedicos, pushMedico, checkMedicExistence};
