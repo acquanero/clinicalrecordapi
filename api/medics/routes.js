@@ -47,7 +47,7 @@ router.post('/', async (req, res) => {
       });
 
       res.status(201)
-      res.send(newMedic);
+      res.send({id: newMedic.ops[0]._id});
 
     } catch(e) {
 
