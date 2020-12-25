@@ -12,6 +12,33 @@ router.get('/', isAuthenticated, async (req, res) => {
 
 });
 
+//Ruta para obtener los datos de un medico
+router.get('/data', isAuthenticated, async (req, res) => {
+
+  const { medicid } = req.body;
+
+  const medico = await MedicosController.getMedic(medicid);
+
+  var myResponse = {"msg": "User not found"};
+
+  if (medico != null){
+
+    myResponse = {
+
+      "_id": medico._id,
+      "name": medico.name,
+      "surname": medico.surname,
+      "mdNumber": medico.mdNumber,
+      "mail": medico.mail
+    }
+
+  }
+
+  res.send(myResponse);
+
+});
+
+
 //Ruta para crear un nuevo usuario medico
 router.post('/', async (req, res) => {
   const { name, surname, mdNumber, mail, password } = req.body;

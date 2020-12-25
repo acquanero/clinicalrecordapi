@@ -15,6 +15,17 @@ async function getMedics() {
     return medicosCollection;
   }
 
+  async function getMedic(medicid) {
+    const mongoClient = await connection.getConnection();
+    const medico = await mongoClient
+      .db(connection.clinicalRecordDb)
+      .collection(COLLECTION_NAME)
+      .findOne({ _id: new mongo.ObjectID(medicid) });
+    await mongoClient.close();
+  
+    return medico;
+  }
+
 async function checkMedicExistence(wantedMail){
 
   const mongoClient = await connection.getConnection();
@@ -89,4 +100,4 @@ async function deactivateMedic(medicid) {
 }
 
 
-module.exports = { getMedics, pushMedic, checkMedicExistence, activateMedic, deactivateMedic};
+module.exports = { getMedics, pushMedic, checkMedicExistence, activateMedic, deactivateMedic, getMedic};
