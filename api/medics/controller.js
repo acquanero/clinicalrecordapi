@@ -127,5 +127,16 @@ async function deactivateMedic(medicid) {
   return result;
 }
 
+async function deleteMedic(medicid) {
+  const mongoClient = await connection.getConnection();
+  const result = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .deleteOne({ _id: new mongo.ObjectID(medicid) });
+  await mongoClient.close();
 
-module.exports = { getMedics, pushMedic, checkMedicExistence, activateMedic, deactivateMedic, getMedic, medicLogin};
+  return result;
+}
+
+
+module.exports = { getMedics, pushMedic, checkMedicExistence, activateMedic, deactivateMedic, getMedic, medicLogin, deleteMedic};
