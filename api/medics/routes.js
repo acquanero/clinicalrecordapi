@@ -4,7 +4,7 @@ const isAuthenticated = require('../../auth');
 
 const MedicosController = require('./controller')
 
-//Ruta para obtener el listado de medicos
+//Route to get medics list
 router.get('/', isAuthenticated, async (req, res) => {
 
     const medicos = await MedicosController.getMedics();
@@ -12,7 +12,18 @@ router.get('/', isAuthenticated, async (req, res) => {
 
 });
 
-//Ruta para obtener los datos de un medico
+//Route to medic log in
+router.post('/login', isAuthenticated, async (req, res) => {
+
+  const {mail, password } = req.body;
+
+  const myresponse = await MedicosController.medicLogin(mail, password);
+
+  res.send(myresponse);
+
+});
+
+//Route to get data from one medic (without the admin data)
 router.get('/data', isAuthenticated, async (req, res) => {
 
   const { medicid } = req.body;
@@ -39,27 +50,27 @@ router.get('/data', isAuthenticated, async (req, res) => {
 });
 
 
-//Ruta para crear un nuevo usuario medico
+//Route to create a new medic
 router.post('/', async (req, res) => {
   const { name, surname, mdNumber, mail, password } = req.body;
 
-  //Chequeo si ya existe un usuario con ese mail
+  //Check if an user with that email exists
 
   const rta = await MedicosController.checkMedicExistence(mail);
 
-  //si ya existe informo el error
+  //if the user already exist, inform error
 
   if (rta == true){
 
     res.status(409)
 
-    res.send("The user already exists");
+    res.send({"msg": "The user already exists"});
 
     return;
 
   } else {
 
-    //si no existe, creo el nuevo usuario
+    //if it doesn't exist, create it
 
     try {
 
@@ -81,14 +92,14 @@ router.post('/', async (req, res) => {
       console.log(e);
 
       res.status(400)
-      res.send("There was an error while creating the user")
+      res.send({"msg": "There was an error while creating the user"});
     }
 
   }
   
 });
 
-//Ruta para activar un medico (dar de alta)
+//Route to activate a medic
 router.put('/activate', isAuthenticated, async (req, res) => {
 
   const { medicid } = req.body;
@@ -105,7 +116,7 @@ router.put('/activate', isAuthenticated, async (req, res) => {
 
 });
 
-//Ruta para activar un medico (dar de alta)
+//Route to deactivate a medic
 router.put('/deactivate', isAuthenticated, async (req, res) => {
 
   const { medicid } = req.body;

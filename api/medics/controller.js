@@ -26,6 +26,34 @@ async function getMedics() {
     return medico;
   }
 
+  async function medicLogin(email, password) {
+    const mongoClient = await connection.getConnection();
+    const medico = await mongoClient
+      .db(connection.clinicalRecordDb)
+      .collection(COLLECTION_NAME)
+      .findOne({ mail: email });
+    await mongoClient.close();
+
+
+    //Set de default response msg
+    let myResponse = {"msg": "Wrong user or password"};
+
+    //if an medic is found with that email, check if the password is correct
+    //if it is, send back the medic id
+
+    if (medico != null){
+
+      if (password == medico.password){
+
+        myResponse = {"medicid": medico._id};
+
+      }
+
+    }
+  
+    return myResponse;
+  }
+
 async function checkMedicExistence(wantedMail){
 
   const mongoClient = await connection.getConnection();
@@ -100,4 +128,4 @@ async function deactivateMedic(medicid) {
 }
 
 
-module.exports = { getMedics, pushMedic, checkMedicExistence, activateMedic, deactivateMedic, getMedic};
+module.exports = { getMedics, pushMedic, checkMedicExistence, activateMedic, deactivateMedic, getMedic, medicLogin};
