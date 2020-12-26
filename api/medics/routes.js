@@ -51,7 +51,7 @@ router.get('/data', isAuthenticated, async (req, res) => {
 
 
 //Route to create a new medic
-router.post('/', async (req, res) => {
+router.post('/', isAuthenticated, async (req, res) => {
   const { name, surname, mdNumber, mail, password } = req.body;
 
   //Check if an user with that email exists
@@ -132,7 +132,7 @@ router.put('/deactivate', isAuthenticated, async (req, res) => {
 
 });
 
-router.delete('/delete', async (req, res) => {
+router.delete('/delete', isAuthenticated, async (req, res) => {
 
   const { medicid } = req.body;
 
