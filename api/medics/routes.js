@@ -149,5 +149,34 @@ router.delete('/delete', async (req, res) => {
   res.send(myResponse);
 });
 
+//Route to update medic info
+router.put('/:id', isAuthenticated, async (req, res) => {
+
+  const { name, surname, mdNumber, mail, password } = req.body;
+
+  let medicid = req.params.id;
+
+  const newData = {
+    "name": name,
+    "surname": surname,
+    "mdNumber": mdNumber,
+    "mail": mail,
+    "password": password
+  }
+
+  const stateResponse = await MedicosController.updateMedic(medicid, newData);
+
+  let myResponse = {"msg": "No user was modifyed"}
+
+  if (stateResponse.result.n != 0){
+
+    myResponse = {"msg": "The user was modifyed"}
+
+  }
+
+  res.send(myResponse);
+
+});
+
 
 module.exports = router;

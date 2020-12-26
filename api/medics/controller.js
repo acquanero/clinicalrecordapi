@@ -138,5 +138,33 @@ async function deleteMedic(medicid) {
   return result;
 }
 
+async function updateMedic(medicid, newData) {
 
-module.exports = { getMedics, pushMedic, checkMedicExistence, activateMedic, deactivateMedic, getMedic, medicLogin, deleteMedic};
+  const mongoClient = await connection.getConnection();
+
+  const query = { _id: new mongo.ObjectID(medicid) };
+
+  const newValuesToInsert = {
+
+    $set: {
+      name: newData.name,
+      surname: newData.surname,
+      mdNumber: newData.mdNumber,
+      mail: newData.mdNumber,
+      password: newData.password
+    },
+
+  }
+
+  const result = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .updateOne(query, newValuesToInsert);
+  await mongoClient.close();
+
+  return result;
+
+}
+
+
+module.exports = { getMedics, pushMedic, checkMedicExistence, activateMedic, deactivateMedic, getMedic, medicLogin, deleteMedic, updateMedic};
