@@ -36,4 +36,23 @@ router.post('/', isAuthenticated, async (req, res) => {
 
   })
 
+  router.delete('/', isAuthenticated, async(req, res) => {
+
+    const { hospitalid } = req.body;
+
+    const result = await HospitalsController.deleteHospital(hospitalid);
+
+    let myResponse = {"msg": "No hospital was deleted"}
+
+    if (result.result.n != 0){
+  
+      myResponse = {"msg": "The hospital was deleted"}
+  
+    }
+
+    res.send(myResponse);
+
+
+  })
+
   module.exports = router;
