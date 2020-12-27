@@ -16,4 +16,16 @@ async function pushHospital(hospital) {
     return state;
   }
 
-  module.exports = {pushHospital};
+  async function getHospitals() {
+    const mongoClient = await connection.getConnection();
+    const hospitalsCollection = await mongoClient
+      .db(connection.clinicalRecordDb)
+      .collection(COLLECTION_NAME)
+      .find()
+      .toArray();
+    await mongoClient.close();
+  
+    return hospitalsCollection;
+  }
+
+  module.exports = {pushHospital, getHospitals};

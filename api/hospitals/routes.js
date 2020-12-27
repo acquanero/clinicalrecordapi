@@ -27,5 +27,13 @@ router.post('/', isAuthenticated, async (req, res) => {
       res.send({'msg': msg});
     
   });
+  
+
+  router.get('/', isAuthenticated, async(req, res)=>{
+
+    const hospitals = await HospitalsController.getHospitals();
+    res.send(hospitals);
+
+  })
 
   module.exports = router;
