@@ -39,4 +39,28 @@ async function pushHospital(hospital) {
     return result;
   }
 
-  module.exports = {pushHospital, getHospitals, deleteHospital};
+  async function putHospital(hospitalid, newData){
+
+    const query = { _id: new mongo.ObjectID(hospitalid) };
+
+    const newValuesToInsert = {
+  
+      $set: {
+        name: newData.name,
+        adress: newData.adress,
+        phone: newData.phone
+      },
+  
+    }
+
+    const mongoClient = await connection.getConnection();
+    const result = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .updateOne(query, newValuesToInsert);
+    await mongoClient.close();
+
+    return result;
+  }
+
+  module.exports = {pushHospital, getHospitals, deleteHospital, putHospital};

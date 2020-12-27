@@ -1,4 +1,5 @@
 var express = require('express');
+const { MongoClient } = require('mongodb');
 var router = express.Router();
 const isAuthenticated = require('../../auth');
 
@@ -50,6 +51,33 @@ router.post('/', isAuthenticated, async (req, res) => {
   
     }
 
+    res.send(myResponse);
+
+
+  })
+
+  router.put('/:hospitalid', isAuthenticated, async(req, res) =>{
+
+    let id = req.params.hospitalid;
+
+    const { name, adress, phone } = req.body;
+
+    const newData = {
+      'name': name,
+      'adress': adress,
+      'phone': phone
+    }
+
+    const result = await HospitalsController.putHospital(id, newData);
+
+    let myResponse = {"msg": "No hospital was modifyed"}
+  
+    if (result.result.n != 0){
+  
+      myResponse = {"msg": "The hospital was modifyed"}
+  
+    }
+  
     res.send(myResponse);
 
 
