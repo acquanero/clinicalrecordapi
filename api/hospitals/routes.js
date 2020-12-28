@@ -1,5 +1,4 @@
 var express = require('express');
-const { MongoClient } = require('mongodb');
 var router = express.Router();
 const isAuthenticated = require('../../auth');
 
