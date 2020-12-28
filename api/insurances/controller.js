@@ -18,4 +18,17 @@ async function pushInsurance(insurance) {
 
   }
 
-  module.exports = { pushInsurance} ;
+  async function getInsurances() {
+    const mongoClient = await connection.getConnection();
+    const insurances = await mongoClient
+      .db(connection.clinicalRecordDb)
+      .collection(COLLECTION_NAME)
+      .find()
+      .toArray();
+    await mongoClient.close();
+  
+    return insurances;
+  }
+
+
+  module.exports = { pushInsurance, getInsurances} ;

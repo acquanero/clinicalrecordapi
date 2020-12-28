@@ -4,7 +4,7 @@ const isAuthenticated = require('../../auth');
 
 const InsurancesController = require('./controller')
 
-//Route to create a new hospital
+//Route to create a new insurance
 router.post('/', isAuthenticated, async (req, res) => {
 
     const { name } = req.body;
@@ -21,9 +21,18 @@ router.post('/', isAuthenticated, async (req, res) => {
 
       }
 
-      res.status(201)
+      res.status(201);
       res.send({'msg': msg});
     
   });
+
+  //Route to gel list of insurances
+
+  router.get('/', isAuthenticated, async(req, res) => {
+
+    const insurances = await InsurancesController.getInsurances();
+    res.send(insurances);
+
+  })
 
   module.exports = router;
