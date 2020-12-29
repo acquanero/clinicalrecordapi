@@ -132,11 +132,9 @@ router.put('/deactivate', isAuthenticated, async (req, res) => {
 
 });
 
-router.delete('/delete', isAuthenticated, async (req, res) => {
+router.delete('/:medicid', isAuthenticated, async (req, res) => {
 
-  const { medicid } = req.body;
-
-  const result = await MedicosController.deleteMedic(medicid);
+  const result = await MedicosController.deleteMedic(req.params.medicid);
 
   let myResponse = {"msg": "No user was deleted"}
 
