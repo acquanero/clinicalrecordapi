@@ -51,4 +51,25 @@ router.post('/', isAuthenticated, async (req, res) => {
 
   })
 
+  router.put('/:insuranceid', isAuthenticated, async(req, res) =>{
+
+    let id = req.params.insuranceid;
+
+    const { name } = req.body;
+
+    const result = await InsurancesController.putInsurance(id, name);
+
+    let myResponse = {"msg": "No insurance was modifyed"}
+  
+    if (result.result.n != 0){
+  
+      myResponse = {"msg": "The insurance was modifyed"}
+  
+    }
+  
+    res.send(myResponse);
+
+
+  })
+
   module.exports = router;

@@ -41,5 +41,27 @@ async function pushInsurance(insurance) {
     return result;
   }
 
+  async function putInsurance(insuranceid, newname){
 
-  module.exports = { pushInsurance, getInsurances, deleteInsurance } ;
+    const query = { _id: new mongo.ObjectID(insuranceid) };
+
+    const newValuesToInsert = {
+  
+      $set: {
+        name: newname
+      },
+  
+    }
+
+    const mongoClient = await connection.getConnection();
+    const result = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .updateOne(query, newValuesToInsert);
+    await mongoClient.close();
+
+    return result;
+  }
+
+
+  module.exports = { pushInsurance, getInsurances, deleteInsurance, putInsurance } ;
