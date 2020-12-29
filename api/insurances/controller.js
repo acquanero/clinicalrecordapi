@@ -30,5 +30,16 @@ async function pushInsurance(insurance) {
     return insurances;
   }
 
+  async function deleteInsurance(insuranceid){
+    const mongoClient = await connection.getConnection();
+    const result = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .deleteOne({_id: new mongo.ObjectID(insuranceid)})
+    await mongoClient.close();
 
-  module.exports = { pushInsurance, getInsurances} ;
+    return result;
+  }
+
+
+  module.exports = { pushInsurance, getInsurances, deleteInsurance } ;

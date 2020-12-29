@@ -35,4 +35,20 @@ router.post('/', isAuthenticated, async (req, res) => {
 
   })
 
+  router.delete('/:insuranceid', isAuthenticated, async(req, res) => {
+
+    const result = await InsurancesController.deleteInsurance(req.params.insuranceid);
+
+    let myResponse = {"msg": "No insurance was deleted"}
+
+    if (result.result.n != 0){
+  
+      myResponse = {"msg": "The insurance was deleted"}
+  
+    }
+  
+    res.send(myResponse);
+
+  })
+
   module.exports = router;
