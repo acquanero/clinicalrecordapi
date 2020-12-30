@@ -26,4 +26,11 @@ router.post('/', isAuthenticated, async (req, res) => {
     
   });
 
+  router.get('/', isAuthenticated, async(req, res) => {
+
+    const result = await SurgerysController.getSurgerys();
+    res.send(result);
+
+  })
+
   module.exports = router;
