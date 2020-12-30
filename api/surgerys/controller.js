@@ -28,4 +28,26 @@ async function pushSurgery(surgery) {
     return surgerysCollection;
   }
 
-  module.exports = { pushSurgery, getSurgerys };
+  async function putSurgery(surgeryid, newname){
+
+    const query = { _id: new mongo.ObjectID(surgeryid) };
+
+    const newValuesToInsert = {
+  
+      $set: {
+        name: newname
+      },
+  
+    }
+
+    const mongoClient = await connection.getConnection();
+    const result = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .updateOne(query, newValuesToInsert);
+    await mongoClient.close();
+
+    return result;
+  }
+
+  module.exports = { pushSurgery, getSurgerys, putSurgery };

@@ -31,6 +31,27 @@ router.post('/', isAuthenticated, async (req, res) => {
     const result = await SurgerysController.getSurgerys();
     res.send(result);
 
-  })
+  });
+
+  router.put('/:surgeryid', isAuthenticated, async(req, res) =>{
+
+    let id = req.params.surgeryid;
+
+    const { name } = req.body;
+
+    const result = await SurgerysController.putSurgery(id, name);
+
+    let myResponse = {"msg": "No surgery was modifyed"}
+  
+    if (result.result.n != 0){
+  
+      myResponse = {"msg": "The surgery name was modifyed"}
+  
+    }
+  
+    res.send(myResponse);
+
+
+  });
 
   module.exports = router;
