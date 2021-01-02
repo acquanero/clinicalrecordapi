@@ -26,4 +26,13 @@ router.post('/', isAuthenticated, async (req, res) => {
     
   });
 
+    //Route to gel list of pathologies
+
+    router.get('/', isAuthenticated, async(req, res) => {
+
+      const pathologys = await PathologysController.getPathologys();
+      res.send(pathologys);
+  
+    })
+
   module.exports = router;

@@ -18,4 +18,16 @@ async function pushPathology(pathology) {
 
   }
 
-  module.exports = { pushPathology };
+  async function getPathologys() {
+    const mongoClient = await connection.getConnection();
+    const pathologys = await mongoClient
+      .db(connection.clinicalRecordDb)
+      .collection(COLLECTION_NAME)
+      .find()
+      .toArray();
+    await mongoClient.close();
+  
+    return pathologys;
+  }
+
+  module.exports = { pushPathology, getPathologys };
