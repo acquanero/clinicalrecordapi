@@ -30,4 +30,26 @@ async function pushPathology(pathology) {
     return pathologys;
   }
 
-  module.exports = { pushPathology, getPathologys };
+  async function putPathology(pathologyid, newname){
+
+    const query = { _id: new mongo.ObjectID(pathologyid) };
+
+    const newValuesToInsert = {
+  
+      $set: {
+        name: newname
+      },
+  
+    }
+
+    const mongoClient = await connection.getConnection();
+    const result = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .updateOne(query, newValuesToInsert);
+    await mongoClient.close();
+
+    return result;
+  }
+
+  module.exports = { pushPathology, getPathologys, putPathology };

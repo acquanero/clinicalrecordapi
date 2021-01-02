@@ -35,4 +35,27 @@ router.post('/', isAuthenticated, async (req, res) => {
   
     })
 
+    //modify pathology name
+
+    router.put('/:pathologyid', isAuthenticated, async(req, res) =>{
+
+      let id = req.params.pathologyid;
+  
+      const { name } = req.body;
+  
+      const result = await PathologysController.putPathology(id, name);
+  
+      let myResponse = {"msg": "No pathology was modifyed"}
+    
+      if (result.result.n != 0){
+    
+        myResponse = {"msg": "The pathology was modifyed"}
+    
+      }
+    
+      res.send(myResponse);
+  
+  
+    })
+
   module.exports = router;
