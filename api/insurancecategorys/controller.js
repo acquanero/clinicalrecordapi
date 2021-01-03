@@ -28,5 +28,21 @@ async function pushInsuranceCategory(category) {
     return insurancesCategorysCollection;
   }
 
+async function getCategorysByInsurance(id) {
 
-  module.exports = {pushInsuranceCategory , getInsuranceCategorys};
+  const query = { insuranceid: id };
+
+  const mongoClient = await connection.getConnection();
+  const insurancesCategorysCollection = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .find(query)
+    .toArray();
+  await mongoClient.close();
+
+  return insurancesCategorysCollection;
+
+}
+
+
+  module.exports = {pushInsuranceCategory , getInsuranceCategorys, getCategorysByInsurance};

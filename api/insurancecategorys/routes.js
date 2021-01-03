@@ -36,4 +36,13 @@ router.post('/', isAuthenticated, async (req, res) => {
 
   })
 
+   //get list of categories of one insurance
+
+  router.get('/:insuranceid', isAuthenticated, async(req, res) => {
+
+    const result = await InsuranceCategorysController.getCategorysByInsurance(req.params.insuranceid);
+    res.send(result);
+
+  })
+
   module.exports = router;
