@@ -38,11 +38,9 @@ router.get('/', isAuthenticated, async (req, res) => {
 
 //delete hospital
 
-router.delete('/', isAuthenticated, async (req, res) => {
+router.delete('/:hospitalid', isAuthenticated, async (req, res) => {
 
-  const { hospitalid } = req.body;
-
-  const result = await HospitalsController.deleteHospital(hospitalid);
+  const result = await HospitalsController.deleteHospital(req.params.hospitalid);
 
   let myResponse = { "msg": "No hospital was deleted" }
 
