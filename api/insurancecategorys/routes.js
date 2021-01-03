@@ -45,4 +45,24 @@ router.post('/', isAuthenticated, async (req, res) => {
 
   })
 
+  //delete category
+  router.delete('/', isAuthenticated, async(req, res) => {
+
+    const { categoryid } = req.body;
+
+    const result = await InsuranceCategorysController.deleteInsuranceCategory(categoryid);
+
+    let myResponse = {"msg": "No category was deleted"}
+
+    if (result.result.n != 0){
+  
+      myResponse = {"msg": "The category was deleted"}
+  
+    }
+
+    res.send(myResponse);
+
+
+  })
+
   module.exports = router;

@@ -44,5 +44,16 @@ async function getCategorysByInsurance(id) {
 
 }
 
+async function deleteInsuranceCategory(id){
+  const mongoClient = await connection.getConnection();
+  const result = await mongoClient
+  .db(connection.clinicalRecordDb)
+  .collection(COLLECTION_NAME)
+  .deleteOne({_id: new mongo.ObjectID(id)})
+  await mongoClient.close();
 
-  module.exports = {pushInsuranceCategory , getInsuranceCategorys, getCategorysByInsurance};
+  return result;
+}
+
+
+  module.exports = {pushInsuranceCategory , getInsuranceCategorys, getCategorysByInsurance, deleteInsuranceCategory};
