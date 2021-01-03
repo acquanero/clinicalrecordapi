@@ -7,71 +7,72 @@ const InsurancesController = require('./controller')
 //Route to create a new insurance
 router.post('/', isAuthenticated, async (req, res) => {
 
-    const { name } = req.body;
+  const { name } = req.body;
 
-    const newInsurance = await InsurancesController.pushInsurance({
-        name
-      });
-
-      let msg = 'No insurance was created';
-
-      if (newInsurance.result.n != 0 ) {
-
-        msg = 'Insurance created succesfully';
-
-      }
-
-      res.status(201);
-      res.send({'msg': msg});
-    
+  const newInsurance = await InsurancesController.pushInsurance({
+    name
   });
 
-  //Route to gel list of insurances
+  let msg = 'No insurance was created';
 
-  router.get('/', isAuthenticated, async(req, res) => {
+  if (newInsurance.result.n != 0) {
 
-    const insurances = await InsurancesController.getInsurances();
-    res.send(insurances);
+    msg = 'Insurance created succesfully';
 
-  })
+  }
 
-  router.delete('/:insuranceid', isAuthenticated, async(req, res) => {
+  res.status(201);
+  res.send({ 'msg': msg });
 
-    const result = await InsurancesController.deleteInsurance(req.params.insuranceid);
+});
 
-    let myResponse = {"msg": "No insurance was deleted"}
+//Route to get list of insurances
 
-    if (result.result.n != 0){
-  
-      myResponse = {"msg": "The insurance was deleted"}
-  
-    }
-  
-    res.send(myResponse);
+router.get('/', isAuthenticated, async (req, res) => {
 
-  })
+  const insurances = await InsurancesController.getInsurances();
+  res.send(insurances);
 
-  //Edit isnurance name
+})
 
-  router.put('/:insuranceid', isAuthenticated, async(req, res) =>{
+//route to delete insurance
+router.delete('/:insuranceid', isAuthenticated, async (req, res) => {
 
-    let id = req.params.insuranceid;
+  const result = await InsurancesController.deleteInsurance(req.params.insuranceid);
 
-    const { name } = req.body;
+  let myResponse = { "msg": "No insurance was deleted" }
 
-    const result = await InsurancesController.putInsurance(id, name);
+  if (result.result.n != 0) {
 
-    let myResponse = {"msg": "No insurance was modifyed"}
-  
-    if (result.result.n != 0){
-  
-      myResponse = {"msg": "The insurance was modifyed"}
-  
-    }
-  
-    res.send(myResponse);
+    myResponse = { "msg": "The insurance was deleted" }
+
+  }
+
+  res.send(myResponse);
+
+})
+
+//Edit isnurance name
+
+router.put('/:insuranceid', isAuthenticated, async (req, res) => {
+
+  let id = req.params.insuranceid;
+
+  const { name } = req.body;
+
+  const result = await InsurancesController.putInsurance(id, name);
+
+  let myResponse = { "msg": "No insurance was modifyed" }
+
+  if (result.result.n != 0) {
+
+    myResponse = { "msg": "The insurance was modifyed" }
+
+  }
+
+  res.send(myResponse);
 
 
-  })
+})
 
-  module.exports = router;
+module.exports = router;
