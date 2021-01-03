@@ -51,6 +51,8 @@ router.post('/', isAuthenticated, async (req, res) => {
 
   })
 
+  //Edit isnurance name
+
   router.put('/:insuranceid', isAuthenticated, async(req, res) =>{
 
     let id = req.params.insuranceid;

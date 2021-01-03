@@ -65,4 +65,27 @@ router.post('/', isAuthenticated, async (req, res) => {
 
   })
 
+    //Edit isnurance category name
+
+    router.put('/:insurancecatid', isAuthenticated, async(req, res) =>{
+
+      let id = req.params.insurancecatid;
+  
+      const { name } = req.body;
+  
+      const result = await InsuranceCategorysController.putInsuranceCategory(id, name);
+  
+      let myResponse = {"msg": "No insurance category was modifyed"}
+    
+      if (result.result.n != 0){
+    
+        myResponse = {"msg": "The insurance category was modifyed"}
+    
+      }
+    
+      res.send(myResponse);
+  
+  
+    })
+
   module.exports = router;

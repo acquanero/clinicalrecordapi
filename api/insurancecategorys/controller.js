@@ -55,5 +55,27 @@ async function deleteInsuranceCategory(id){
   return result;
 }
 
+async function putInsuranceCategory(insurancecatid, newname){
 
-  module.exports = {pushInsuranceCategory , getInsuranceCategorys, getCategorysByInsurance, deleteInsuranceCategory};
+  const query = { _id: new mongo.ObjectID(insurancecatid) };
+
+  const newValuesToInsert = {
+
+    $set: {
+      name: newname
+    },
+
+  }
+
+  const mongoClient = await connection.getConnection();
+  const result = await mongoClient
+  .db(connection.clinicalRecordDb)
+  .collection(COLLECTION_NAME)
+  .updateOne(query, newValuesToInsert);
+  await mongoClient.close();
+
+  return result;
+}
+
+
+  module.exports = {pushInsuranceCategory , getInsuranceCategorys, getCategorysByInsurance, deleteInsuranceCategory, putInsuranceCategory};
