@@ -28,4 +28,15 @@ async function pushPatient(patient) {
     return patientsCollection;
   }
 
-  module.exports = {pushPatient, getPatients};
+  async function deletePatient(patientid){
+    const mongoClient = await connection.getConnection();
+    const result = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .deleteOne({_id: new mongo.ObjectID(patientid)})
+    await mongoClient.close();
+
+    return result;
+  }
+
+  module.exports = {pushPatient, getPatients, deletePatient};
