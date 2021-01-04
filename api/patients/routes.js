@@ -10,9 +10,12 @@ const PatientsController = require('./controller')
 //route to create a patient
 router.post('/', isAuthenticated, async (req, res) => {
 
+  let surnameLower = req.body.surname
+  let nameLower = req.body.name
+
   const result = await PatientsController.pushPatient({
-    name: req.body.name,
-    surname: req.body.surname,
+    name: nameLower.toLowerCase(),
+    surname: surnameLower.toLowerCase(),
     dni: req.body.dni,
     birthdate: dateConverter.dateConverter(req.body.birthdate),
     insurance: req.body.insurance,
@@ -66,9 +69,12 @@ router.delete('/:patientid', isAuthenticated, async (req, res) => {
 //route to modify a patient
 router.put('/:patientid', isAuthenticated, async (req, res) => {
 
+  let surnameLower = req.body.surname
+  let nameLower = req.body.name
+
   const result = await PatientsController.putPatient(req.params.patientid, {
-    name: req.body.name,
-    surname: req.body.surname,
+    name: nameLower.toLowerCase(),
+    surname: surnameLower.toLowerCase(),
     dni: req.body.dni,
     birthdate: dateConverter.dateConverter(req.body.birthdate),
     insurance: req.body.insurance,
@@ -91,5 +97,13 @@ router.put('/:patientid', isAuthenticated, async (req, res) => {
   }
 
 });
+
+//get list of patients by surname
+router.get('/:surname', isAuthenticated, async (req, res) => {
+
+  const patients = await PatientsController.getPatientsBySurname(req.params.surname);
+  res.send(patients);
+
+})
 
 module.exports = router;
