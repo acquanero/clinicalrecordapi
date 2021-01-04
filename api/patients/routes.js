@@ -36,4 +36,12 @@ router.post('/', isAuthenticated, async (req, res) => {
 
   });
 
+  //get list of patients
+router.get('/', isAuthenticated, async (req, res) => {
+
+    const patients = await PatientsController.getPatients();
+    res.send(patients);
+  
+  })
+
 module.exports = router;

@@ -28,7 +28,7 @@ router.post('/', isAuthenticated, async (req, res) => {
 
 });
 
-//get list of gospitals
+//get list of hospitals
 router.get('/', isAuthenticated, async (req, res) => {
 
   const hospitals = await HospitalsController.getHospitals();
