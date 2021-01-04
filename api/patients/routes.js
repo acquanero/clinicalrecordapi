@@ -17,7 +17,7 @@ router.post('/', isAuthenticated, async (req, res) => {
     birthdate: dateConverter.dateConverter(req.body.birthdate),
     insurance: req.body.insurance,
     insurancecategory: req.body.insurancecategory,
-    adress: req.body.insurance,
+    adress: req.body.adress,
     mail: req.body.mail,
     phone: req.body.phone,
     hospital: req.body.hospital,
@@ -62,5 +62,34 @@ router.delete('/:patientid', isAuthenticated, async (req, res) => {
 
 
 })
+
+//route to modify a patient
+router.put('/:patientid', isAuthenticated, async (req, res) => {
+
+  const result = await PatientsController.putPatient(req.params.patientid, {
+    name: req.body.name,
+    surname: req.body.surname,
+    dni: req.body.dni,
+    birthdate: dateConverter.dateConverter(req.body.birthdate),
+    insurance: req.body.insurance,
+    insurancecategory: req.body.insurancecategory,
+    adress: req.body.adress,
+    mail: req.body.mail,
+    phone: req.body.phone,
+    hospital: req.body.hospital,
+    inpatient: req.body.inpatient
+  });
+
+  if (result.result.n != 0) {
+
+    res.status(201)
+    res.send({ 'msg': 'The patient information was modified' })
+
+  } else {
+    res.status(500)
+    res.send({ 'msg': 'No patient was modified' })
+  }
+
+});
 
 module.exports = router;
