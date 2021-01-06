@@ -106,4 +106,12 @@ router.get('/:surname', isAuthenticated, async (req, res) => {
 
 })
 
+//get list of patients by hospital
+router.get('/byhospital/:hospitalid', isAuthenticated, async (req, res) => {
+
+  const patients = await PatientsController.getPatientByHospital(req.params.hospitalid);
+  res.send(patients);
+
+})
+
 module.exports = router;
