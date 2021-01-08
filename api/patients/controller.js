@@ -71,41 +71,8 @@ async function pushPatient(patient) {
     return result;
   }
 
-  async function getPatientsBySurname(lastname){
 
-    const query = { surname: lastname };
-
-    const mongoClient = await connection.getConnection();
-    const patientsCollection = await mongoClient
-      .db(connection.clinicalRecordDb)
-      .collection(COLLECTION_NAME)
-      .find(query)
-      .toArray();
-    await mongoClient.close();
-  
-    return patientsCollection;
-
-  }
-
-    async function getPatientsBySurname(lastname){
-
-    const query = { surname: lastname };
-
-    const mongoClient = await connection.getConnection();
-    const patientsCollection = await mongoClient
-      .db(connection.clinicalRecordDb)
-      .collection(COLLECTION_NAME)
-      .find(query)
-      .toArray();
-    await mongoClient.close();
-  
-    return patientsCollection;
-
-  }
-
-  async function getPatientByHospital(hospitalid){
-
-    const query = { hospital: hospitalid };
+  async function getPatientsListByParam(query){
 
     const mongoClient = await connection.getConnection();
     const patientsCollection = await mongoClient
@@ -121,4 +88,4 @@ async function pushPatient(patient) {
 
 
 
-  module.exports = {pushPatient, getPatients, deletePatient, putPatient, getPatientsBySurname, getPatientByHospital};
+  module.exports = {pushPatient, getPatients, deletePatient, putPatient, getPatientsListByParam};

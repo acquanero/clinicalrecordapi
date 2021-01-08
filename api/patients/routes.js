@@ -101,7 +101,9 @@ router.put('/:patientid', isAuthenticated, async (req, res) => {
 //get list of patients by surname
 router.get('/:surname', isAuthenticated, async (req, res) => {
 
-  const patients = await PatientsController.getPatientsBySurname(req.params.surname);
+  const myquery = { surname: req.params.surname };
+
+  const patients = await PatientsController.getPatientsListByParam(myquery);
   res.send(patients);
 
 })
@@ -109,7 +111,9 @@ router.get('/:surname', isAuthenticated, async (req, res) => {
 //get list of patients by hospital
 router.get('/byhospital/:hospitalid', isAuthenticated, async (req, res) => {
 
-  const patients = await PatientsController.getPatientByHospital(req.params.hospitalid);
+  const myquery = { hospital: req.params.hospitalid };
+
+  const patients = await PatientsController.getPatientsListByParam(myquery);
   res.send(patients);
 
 })
