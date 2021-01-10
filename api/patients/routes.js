@@ -128,4 +128,14 @@ router.get('/inpatients', isAuthenticated, async (req, res) => {
 
 })
 
+//get list of discharged
+router.get('/discharged', isAuthenticated, async (req, res) => {
+
+  const myquery = {inpatient: {$eq: false}};
+
+  const patients = await PatientsController.getPatientsListByParam(myquery);
+  res.send(patients);
+
+})
+
 module.exports = router;
