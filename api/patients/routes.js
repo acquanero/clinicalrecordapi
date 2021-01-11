@@ -138,4 +138,12 @@ router.get('/discharged', isAuthenticated, async (req, res) => {
 
 })
 
+//get list of discharged
+router.get('/data/:patientid', isAuthenticated, async (req, res) => {
+
+  const patient = await PatientsController.getPatient(req.params.patientid);
+  res.send(patient);
+
+})
+
 module.exports = router;

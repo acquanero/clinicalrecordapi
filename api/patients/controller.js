@@ -86,6 +86,18 @@ async function pushPatient(patient) {
 
   }
 
+  async function getPatient(patientid){
+    const mongoClient = await connection.getConnection();
+    const result = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .findOne({_id: new mongo.ObjectID(patientid)})
+    await mongoClient.close();
+
+    return result;
+  }
 
 
-  module.exports = {pushPatient, getPatients, deletePatient, putPatient, getPatientsListByParam};
+
+
+  module.exports = {pushPatient, getPatients, deletePatient, putPatient, getPatientsListByParam, getPatient};
