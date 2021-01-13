@@ -101,9 +101,26 @@ router.put('/:patientid', isAuthenticated, async (req, res) => {
 //get list of patients by surname
 router.get('/bysurname/:surname', isAuthenticated, async (req, res) => {
 
-  const myquery = { surname: req.params.surname };
+  let thesurname = req.params.surname
+  let surnameLower = thesurname.toLowerCase();
+
+  const myquery = { surname: surnameLower };
 
   const patients = await PatientsController.getPatientsListByParam(myquery);
+  res.send(patients);
+
+})
+
+//get list of patients by letter
+router.get('/alphabetical/:letter', isAuthenticated, async (req, res) => {
+
+  let theletter = req.params.letter;
+  let lowerLetter = theletter.toLowerCase();
+
+  var qstr = '/^' + lowerLetter + '/';
+
+  const patients = await PatientsController.getPatientsListByParam({ surname: eval(qstr)});
+
   res.send(patients);
 
 })
