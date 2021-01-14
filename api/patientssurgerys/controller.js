@@ -31,4 +31,16 @@ async function pushPatientSurgery(patientSurgery) {
     return patientsCollection;
   }
 
-  module.exports = { pushPatientSurgery, getPatientSurgerys };
+  async function deletePatientSurgery(id){
+
+    const mongoClient = await connection.getConnection();
+    const result = await mongoClient
+      .db(connection.clinicalRecordDb)
+      .collection(COLLECTION_NAME)
+      .deleteOne({ _id: new mongo.ObjectID(id) });
+    await mongoClient.close();
+  
+    return result;
+  }
+
+  module.exports = { pushPatientSurgery, getPatientSurgerys, deletePatientSurgery };

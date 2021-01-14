@@ -40,4 +40,21 @@ router.get('/:patientid', isAuthenticated, async(req, res) => {
 
 })
 
+//Route to delete patient surgery
+router.delete('/:surgeryid', isAuthenticated, async(req, res) => {
+
+  const result = await PatientSurgerysController.deletePatientSurgery(req.params.surgeryid);
+
+  let myResponse = {"msg": "No surgery was deleted"}
+
+  if (result.result.n != 0){
+
+    myResponse = {"msg": "The surgery was deleted"}
+
+  }
+
+  res.send(myResponse);
+
+})
+
 module.exports = router;
