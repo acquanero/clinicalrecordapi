@@ -137,14 +137,22 @@ router.get('/alphabetical/:letter', isAuthenticated, async (req, res) => {
 
   }
 
-
-
 })
 
 //get list of patients by hospital
 router.get('/byhospital/:hospitalid', isAuthenticated, async (req, res) => {
 
   const myquery = { hospital: req.params.hospitalid };
+
+  const patients = await PatientsController.getPatientsListByParam(myquery);
+  res.send(patients);
+
+})
+
+//get patient by dni
+router.get('/dni/:dni', isAuthenticated, async (req, res) => {
+
+  const myquery = { dni: req.params.dni };
 
   const patients = await PatientsController.getPatientsListByParam(myquery);
   res.send(patients);
