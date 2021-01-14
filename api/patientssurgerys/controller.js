@@ -16,4 +16,19 @@ async function pushPatientSurgery(patientSurgery) {
     return state;
   }
 
-  module.exports = { pushPatientSurgery };
+  async function getPatientSurgerys(id) {
+
+    const query = { patientid: id};
+
+    const mongoClient = await connection.getConnection();
+    const patientsCollection = await mongoClient
+      .db(connection.clinicalRecordDb)
+      .collection(COLLECTION_NAME)
+      .find(query)
+      .toArray();
+    await mongoClient.close();
+  
+    return patientsCollection;
+  }
+
+  module.exports = { pushPatientSurgery, getPatientSurgerys };

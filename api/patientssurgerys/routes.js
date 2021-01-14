@@ -30,4 +30,14 @@ router.post('/', isAuthenticated, async (req, res) => {
 
 });
 
+//Route to get list of one patient surgerys
+
+router.get('/:patientid', isAuthenticated, async(req, res) => {
+
+  const surgerys = await PatientSurgerysController.getPatientSurgerys(req.params.patientid);
+
+  res.send(surgerys);
+
+})
+
 module.exports = router;
