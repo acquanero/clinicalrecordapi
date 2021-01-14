@@ -1,7 +1,7 @@
 const mongo = require('mongodb');
 const connection = require('../../dbconnection/dbclient');
 
-const COLLECTION_NAME = 'surgerys'; // variable para no repetir la colección
+const COLLECTION_NAME = 'typeofsurgerys'; // variable para no repetir la colección
 
 async function pushSurgery(surgery) {
 

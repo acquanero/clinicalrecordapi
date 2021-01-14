@@ -2,14 +2,14 @@ var express = require('express');
 var router = express.Router();
 const isAuthenticated = require('../../auth');
 
-const SurgerysController = require('./controller')
+const SurgeryTypeController = require('./controller')
 
 //Route to create a new surgery type
 router.post('/', isAuthenticated, async (req, res) => {
 
     const { name } = req.body;
 
-    const newSurgery = await SurgerysController.pushSurgery({
+    const newSurgery = await SurgeryTypeController.pushSurgery({
         name
       });
 
@@ -28,7 +28,7 @@ router.post('/', isAuthenticated, async (req, res) => {
 
   router.get('/', isAuthenticated, async(req, res) => {
 
-    const result = await SurgerysController.getSurgerys();
+    const result = await SurgeryTypeController.getSurgerys();
     res.send(result);
 
   });
@@ -39,7 +39,7 @@ router.post('/', isAuthenticated, async (req, res) => {
 
     const { name } = req.body;
 
-    const result = await SurgerysController.putSurgery(id, name);
+    const result = await SurgeryTypeController.putSurgery(id, name);
 
     let myResponse = {"msg": "No surgery was modifyed"}
   
