@@ -57,4 +57,35 @@ router.delete('/:surgeryid', isAuthenticated, async(req, res) => {
 
 })
 
+//Route to modify a  patient surgery
+router.put('/:surgeryid', isAuthenticated, async (req, res) => {
+
+  const { patientid, typeofsurgeryid, pathologyid, medicid, date, description } = req.body;
+
+  let surgeryid = req.params.surgeryid;
+
+  const newData = {
+    "patientid": patientid,
+    "typeofsurgeryid": typeofsurgeryid,
+    "pathologyid": pathologyid,
+    "medicid": medicid,
+    "date": dateConverter.dateConverter(date),
+    "description": description,
+  }
+
+  const stateResponse = await PatientSurgerysController.updatePatientSurgery(surgeryid, newData);
+
+  let msg = 'No surgery was modify';
+
+  if (stateResponse.result.n != 0) {
+
+    msg = 'The patients surgery was modifyed';
+
+  }
+
+  res.status(201)
+  res.send({ 'msg': msg });
+
+});
+
 module.exports = router;

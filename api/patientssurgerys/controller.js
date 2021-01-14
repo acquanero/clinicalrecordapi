@@ -43,4 +43,32 @@ async function pushPatientSurgery(patientSurgery) {
     return result;
   }
 
-  module.exports = { pushPatientSurgery, getPatientSurgerys, deletePatientSurgery };
+  async function updatePatientSurgery(id, newData){
+
+    const mongoClient = await connection.getConnection();
+
+    const query = { _id: new mongo.ObjectID(id) };
+  
+    const newValuesToInsert = {
+  
+      $set: {
+        patientid: newData.patientid,
+        typeofsurgeryid: newData.typeofsurgeryid,
+        pathologyid: newData.pathologyid,
+        date: newData.date,
+        description: newData.description
+      },
+  
+    }
+  
+    const result = await mongoClient
+      .db(connection.clinicalRecordDb)
+      .collection(COLLECTION_NAME)
+      .updateOne(query, newValuesToInsert);
+    await mongoClient.close();
+  
+    return result;
+
+  }
+
+  module.exports = { pushPatientSurgery, getPatientSurgerys, deletePatientSurgery, updatePatientSurgery };
