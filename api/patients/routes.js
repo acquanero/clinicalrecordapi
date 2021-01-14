@@ -114,14 +114,30 @@ router.get('/bysurname/:surname', isAuthenticated, async (req, res) => {
 //get list of patients by letter
 router.get('/alphabetical/:letter', isAuthenticated, async (req, res) => {
 
+  let letras = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','ñ','o','p','q','r','s','t','u','v','w','x','y','z'];
+
   let theletter = req.params.letter;
+
   let lowerLetter = theletter.toLowerCase();
 
-  var qstr = '/^' + lowerLetter + '/';
+  //check if only a letter is recived, to avoid injection
 
-  const patients = await PatientsController.getPatientsListByParam({ surname: eval(qstr)});
+  if (letras.includes(lowerLetter)) {
 
-  res.send(patients);
+    var qstr = '/^' + lowerLetter + '/';
+
+    const patients = await PatientsController.getPatientsListByParam({ surname: eval(qstr)});
+  
+    res.send(patients);
+
+  } else {
+
+    res.status(400)
+    res.send({ 'msg': 'Bad request' })
+
+  }
+
+
 
 })
 
