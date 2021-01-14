@@ -187,4 +187,22 @@ router.get('/data/:patientid', isAuthenticated, async (req, res) => {
 
 })
 
+//set patients as discharged
+
+router.put('/discharge/:patientid', isAuthenticated, async(req,res)=> {
+
+  const result = await PatientsController.dischargePatient(req.params.patientid);
+
+  if (result.result.n != 0) {
+
+    res.status(201)
+    res.send({ 'msg': 'The patient was discharged' })
+
+  } else {
+    res.status(500)
+    res.send({ 'msg': 'No patient was discharged' })
+  }
+
+})
+
 module.exports = router;

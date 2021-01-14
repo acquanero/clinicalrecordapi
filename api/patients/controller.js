@@ -97,7 +97,30 @@ async function pushPatient(patient) {
     return result;
   }
 
+  async function dischargePatient(patientid){
+
+    const query = { _id: new mongo.ObjectID(patientid) };
+
+    const newValuesToInsert = {
+  
+      $set: {
+        hospital: "",
+        inpatient: false
+      },
+  
+    }
+
+    const mongoClient = await connection.getConnection();
+    const result = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .updateOne(query, newValuesToInsert);
+    await mongoClient.close();
+
+    return result;
+  }
 
 
 
-  module.exports = {pushPatient, getPatients, deletePatient, putPatient, getPatientsListByParam, getPatient};
+
+  module.exports = {pushPatient, getPatients, deletePatient, putPatient, getPatientsListByParam, getPatient, dischargePatient};
