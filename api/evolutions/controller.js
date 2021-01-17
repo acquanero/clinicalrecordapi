@@ -29,4 +29,17 @@ async function pushEvolution(evolution) {
     return state;
   }
 
-  module.exports = { pushEvolution, getPatientEvolutions };
+  async function deletePatientEvolution(evolutionid){
+
+    const mongoClient = await connection.getConnection();
+
+    const state = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .deleteOne({ _id: new mongo.ObjectID(evolutionid) });
+
+    return state;
+
+  }
+
+  module.exports = { pushEvolution, getPatientEvolutions, deletePatientEvolution };

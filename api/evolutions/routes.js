@@ -7,7 +7,7 @@ const dateConverter = require('../../myutils/dateConverter');
 const EvolutionsController = require('./controller')
 
 //endpoint to creat a patient evolution
-router.post('/', isAuthenticated, async(req, res) => {
+router.post('/', isAuthenticated, async (req, res) => {
 
     const { patientid, medicid, date, description } = req.body;
 
@@ -24,11 +24,11 @@ router.post('/', isAuthenticated, async(req, res) => {
     let msg = 'No evolution was created';
 
     if (result.result.n != 0) {
-  
-      msg = 'Evolution created succesfully';
-  
+
+        msg = 'Evolution created succesfully';
+
     }
-  
+
     res.status(201)
     res.send({ 'msg': msg });
 
@@ -36,11 +36,28 @@ router.post('/', isAuthenticated, async(req, res) => {
 
 //endpoint to get all patient evolutions
 
-router.get('/:patientid', isAuthenticated, async(req, res) => {
+router.get('/:patientid', isAuthenticated, async (req, res) => {
 
     const evolutions = await EvolutionsController.getPatientEvolutions(req.params.patientid);
 
     res.send(evolutions);
 })
+
+//endpoint to delete an evolution
+router.delete('/:evolutionid', isAuthenticated, async (req, res) => {
+
+    const result = await EvolutionsController.deletePatientEvolution(req.params.evolutionid);
+
+    let msg = 'No evolution was deleted';
+
+    if (result.result.n != 0) {
+
+        msg = 'Evolution deleted';
+
+    }
+
+    res.status(201)
+    res.send({ 'msg': msg });
+});
 
 module.exports = router;
