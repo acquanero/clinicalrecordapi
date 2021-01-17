@@ -6,6 +6,7 @@ const dateConverter = require('../../myutils/dateConverter');
 
 const EvolutionsController = require('./controller')
 
+//endpoint to creat a patient evolution
 router.post('/', isAuthenticated, async(req, res) => {
 
     const { patientid, medicid, date, description } = req.body;
@@ -31,8 +32,15 @@ router.post('/', isAuthenticated, async(req, res) => {
     res.status(201)
     res.send({ 'msg': msg });
 
-
 })
 
+//endpoint to get all patient evolutions
+
+router.get('/:patientid', isAuthenticated, async(req, res) => {
+
+    const evolutions = await EvolutionsController.getPatientEvolutions(req.params.patientid);
+
+    res.send(evolutions);
+})
 
 module.exports = router;
