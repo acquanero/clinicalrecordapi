@@ -12,6 +12,7 @@ const diseases = require('./diseases/routes');
 const medications = require('./medications/routes');
 const patients = require('./patients/routes');
 const patientssurgerys = require('./patientssurgerys/routes');
+const evolutions = require('./evolutions/routes');
 
 router.use('/medics', medics);
 router.use('/hospitals', hospitals);
@@ -24,6 +25,7 @@ router.use('/diseases', diseases);
 router.use('/medications', medications);
 router.use('/patients', patients);
 router.use('/patientssurgerys', patientssurgerys);
+router.use('/evolutions', evolutions);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
