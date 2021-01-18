@@ -31,4 +31,14 @@ router.post('/', isAuthenticated, async (req, res) => {
 
 })
 
+//endpoint to get list of patient biopsies
+
+router.get('/:patientid', isAuthenticated, async(req, res) =>{
+
+    const biopsies = await BiopsysController.getPatientBiopsys(req.params.patientid);
+
+    res.send(biopsies);
+
+})
+
 module.exports = router;
