@@ -41,4 +41,22 @@ router.get('/:patientid', isAuthenticated, async(req, res) =>{
 
 })
 
+//endpoint to delete patient biopsy
+
+router.delete('/:biopsyid', isAuthenticated, async(req, res) => {
+
+    const result = await BiopsysController.deletePatientBiopsy(req.params.biopsyid);
+
+    let msg = 'No biopsy was deleted';
+
+    if (result.result.n != 0) {
+
+        msg = 'The biopsy was deleted';
+
+    }
+    res.send({ 'msg': msg });
+
+
+})
+
 module.exports = router;

@@ -25,9 +25,25 @@ async function pushBiopsy(biopsy) {
     .collection(COLLECTION_NAME)
     .find({ patientid: recivedIdPatient})
     .toArray();
+    await mongoClient.close();
 
     return state;
 
   }
 
-  module.exports = { pushBiopsy, getPatientBiopsys };
+  async function deletePatientBiopsy(biopsyid){
+
+    const mongoClient = await connection.getConnection();
+
+    const state = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .deleteOne({_id: new mongo.ObjectID(biopsyid)})
+
+    await mongoClient.close();
+
+    return state;
+
+  }
+
+  module.exports = { pushBiopsy, getPatientBiopsys, deletePatientBiopsy };
