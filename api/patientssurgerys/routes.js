@@ -127,4 +127,20 @@ router.get('/getsupplylist/:surgeryid', isAuthenticated, async(req, res) => {
 
 });
 
+router.delete('/deletesupply/:surgerysupplyid', isAuthenticated, async(req, res) => {
+
+  const result = await PatientSurgerysController.deletePatientSurgerySupply(req.params.surgerysupplyid);
+
+  let msg = 'No supply was deleted';
+
+  if (result.result.n != 0) {
+
+    msg = 'The supply was deleted';
+
+  }
+
+  res.send({ 'msg': msg });
+
+});
+
 module.exports = router;

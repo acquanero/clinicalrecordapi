@@ -102,8 +102,6 @@ async function pushPatientSurgery(patientSurgery) {
       .find(query)
       .toArray();
 
-    //console.log(arrayOfSurgerySupplysIdRelation);
-
     let arrayOfSurgerySupplysIdName = {
       supplys: [],
     };
@@ -132,4 +130,22 @@ async function pushPatientSurgery(patientSurgery) {
 
   }
 
-  module.exports = { pushPatientSurgery, getPatientSurgerys, deletePatientSurgery, updatePatientSurgery, pushPatientSurgerySupply, getPatientSurgerySupplys };
+  async function deletePatientSurgerySupply(surgerysupplyid){
+
+    const query = { _id: new mongo.ObjectID(surgerysupplyid)};
+
+    const mongoClient = await connection.getConnection();
+
+    const result = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_SURGERY_SUPPLYS_RELATION)
+    .deleteOne(query);
+
+    await mongoClient.close();
+
+    return result;
+
+  }
+
+  module.exports = { pushPatientSurgery, getPatientSurgerys, deletePatientSurgery, updatePatientSurgery, 
+    pushPatientSurgerySupply, getPatientSurgerySupplys, deletePatientSurgerySupply };
