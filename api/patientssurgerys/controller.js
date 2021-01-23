@@ -1,8 +1,9 @@
 const mongo = require('mongodb');
 const connection = require('../../dbconnection/dbclient');
 
-const COLLECTION_NAME = 'patientssurgerys'; // variable para no repetir la colección
-const DEPENDENT_COLLECTION = 'surgerysupplys';
+const COLLECTION_PATIENTS_SURGERIES = 'patientssurgerys';
+const COLLECTION_SURGERY_SUPPLYS_RELATION = 'surgerysupplys';
+const COLLECTION_WITH_SUPPLY_NAMES = 'supplys';
 
 async function pushPatientSurgery(patientSurgery) {
 
@@ -10,7 +11,7 @@ async function pushPatientSurgery(patientSurgery) {
   
     const state = await mongoClient
       .db(connection.clinicalRecordDb)
-      .collection(COLLECTION_NAME)
+      .collection(COLLECTION_PATIENTS_SURGERIES)
       .insertOne(patientSurgery);
     await mongoClient.close();
   
@@ -24,7 +25,7 @@ async function pushPatientSurgery(patientSurgery) {
     const mongoClient = await connection.getConnection();
     const patientsCollection = await mongoClient
       .db(connection.clinicalRecordDb)
-      .collection(COLLECTION_NAME)
+      .collection(COLLECTION_PATIENTS_SURGERIES)
       .find(query)
       .toArray();
     await mongoClient.close();
@@ -37,7 +38,7 @@ async function pushPatientSurgery(patientSurgery) {
     const mongoClient = await connection.getConnection();
     const result = await mongoClient
       .db(connection.clinicalRecordDb)
-      .collection(COLLECTION_NAME)
+      .collection(COLLECTION_PATIENTS_SURGERIES)
       .deleteOne({ _id: new mongo.ObjectID(id) });
     await mongoClient.close();
   
@@ -64,7 +65,7 @@ async function pushPatientSurgery(patientSurgery) {
   
     const result = await mongoClient
       .db(connection.clinicalRecordDb)
-      .collection(COLLECTION_NAME)
+      .collection(COLLECTION_PATIENTS_SURGERIES)
       .updateOne(query, newValuesToInsert);
     await mongoClient.close();
   
@@ -80,11 +81,55 @@ async function pushPatientSurgery(patientSurgery) {
   
     const state = await mongoClient
       .db(connection.clinicalRecordDb)
-      .collection(DEPENDENT_COLLECTION)
+      .collection(COLLECTION_SURGERY_SUPPLYS_RELATION)
       .insertOne(newSurgerySupply);
     await mongoClient.close();
   
     return state;
   }
 
-  module.exports = { pushPatientSurgery, getPatientSurgerys, deletePatientSurgery, updatePatientSurgery, pushPatientSurgerySupply };
+  //Function that gets all de entries from Collection where the surgery ID us found and the gets the name of the supplys
+
+  async function getPatientSurgerySupplys(recivedSurgeryId){
+
+    const query = { surgeryid: recivedSurgeryId};
+
+    const mongoClient = await connection.getConnection();
+
+    const arrayOfSurgerySupplysIdRelation = await mongoClient
+      .db(connection.clinicalRecordDb)
+      .collection(COLLECTION_SURGERY_SUPPLYS_RELATION)
+      .find(query)
+      .toArray();
+
+    //console.log(arrayOfSurgerySupplysIdRelation);
+
+    let arrayOfSurgerySupplysIdName = {
+      supplys: [],
+    };
+
+    for (const objectSupplyIdName of arrayOfSurgerySupplysIdRelation){
+
+      let queryForNames = { _id: new mongo.ObjectID(objectSupplyIdName.supplyid) }
+
+      let oneSupply = await mongoClient
+        .db(connection.clinicalRecordDb)
+        .collection(COLLECTION_WITH_SUPPLY_NAMES)
+        .findOne(queryForNames)
+
+      console.log(oneSupply.name);
+
+      arrayOfSurgerySupplysIdName.supplys.push(oneSupply.name);
+
+    }
+
+    console.log(arrayOfSurgerySupplysIdName);
+
+    await mongoClient.close();
+
+
+    return arrayOfSurgerySupplysIdName;
+
+  }
+
+  module.exports = { pushPatientSurgery, getPatientSurgerys, deletePatientSurgery, updatePatientSurgery, pushPatientSurgerySupply, getPatientSurgerySupplys };

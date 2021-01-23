@@ -116,4 +116,15 @@ router.post('/addsupplytosurgery/:surgeryid', isAuthenticated, async (req, res) 
 
 });
 
+//Route to get the list of supplys from a patients surgery
+
+router.get('/getsupplylist/:surgeryid', isAuthenticated, async(req, res) => {
+
+  const result = await PatientSurgerysController.getPatientSurgerySupplys(req.params.surgeryid);
+
+  res.send(result);
+
+
+});
+
 module.exports = router;
