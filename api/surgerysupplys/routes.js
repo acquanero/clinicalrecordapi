@@ -37,9 +37,9 @@ router.get('/', isAuthenticated, async (req, res) => {
 
 //modify supply name
 
-router.put('/:supplyid', isAuthenticated, async (req, res) => {
+router.put('/:surgerysupplyid', isAuthenticated, async (req, res) => {
 
-    let id = req.params.supplyid;
+    let id = req.params.surgerysupplyid;
 
     const { name } = req.body;
 

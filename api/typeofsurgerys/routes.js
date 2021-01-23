@@ -33,9 +33,9 @@ router.post('/', isAuthenticated, async (req, res) => {
 
   });
 
-  router.put('/:surgeryid', isAuthenticated, async(req, res) =>{
+  router.put('/:typeofsurgeryid', isAuthenticated, async(req, res) =>{
 
-    let id = req.params.surgeryid;
+    let id = req.params.typeofsurgeryid;
 
     const { name } = req.body;
 
