@@ -88,4 +88,32 @@ router.put('/:surgeryid', isAuthenticated, async (req, res) => {
 
 });
 
+
+//Endpoint to perfom CRUD of one patient surgery supplys
+
+//Route to create a new supply for a patients surgery
+router.post('/addsupplytosurgery/:surgeryid', isAuthenticated, async (req, res) => {
+
+  const { supplyid } = req.body;
+
+  const newSurgerySupply = await PatientSurgerysController.pushPatientSurgerySupply({
+
+    surgeryid: req.params.surgeryid,
+    supplyid: supplyid,
+
+  });
+
+  let msg = 'No patient surgery supply was created for the patient';
+
+  if (newSurgerySupply.result.n != 0) {
+
+    msg = 'New patient surgery supply created succesfully';
+
+  }
+
+  res.status(201)
+  res.send({ 'msg': msg });
+
+});
+
 module.exports = router;

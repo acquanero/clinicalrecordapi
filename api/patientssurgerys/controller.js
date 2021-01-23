@@ -2,6 +2,7 @@ const mongo = require('mongodb');
 const connection = require('../../dbconnection/dbclient');
 
 const COLLECTION_NAME = 'patientssurgerys'; // variable para no repetir la colección
+const DEPENDENT_COLLECTION = 'surgerysupplys';
 
 async function pushPatientSurgery(patientSurgery) {
 
@@ -71,4 +72,19 @@ async function pushPatientSurgery(patientSurgery) {
 
   }
 
-  module.exports = { pushPatientSurgery, getPatientSurgerys, deletePatientSurgery, updatePatientSurgery };
+  //Functions to perform CRUD on DEPENDANT_COLLECTION
+
+  async function pushPatientSurgerySupply(newSurgerySupply) {
+
+    const mongoClient = await connection.getConnection();
+  
+    const state = await mongoClient
+      .db(connection.clinicalRecordDb)
+      .collection(DEPENDENT_COLLECTION)
+      .insertOne(newSurgerySupply);
+    await mongoClient.close();
+  
+    return state;
+  }
+
+  module.exports = { pushPatientSurgery, getPatientSurgerys, deletePatientSurgery, updatePatientSurgery, pushPatientSurgerySupply };
