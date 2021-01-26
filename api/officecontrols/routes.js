@@ -43,4 +43,22 @@ router.get('/:patientid', isAuthenticated, async (req, res) => {
     res.send(officecontrols);
 })
 
+//endpoint to delete one office control
+
+router.delete('/:officecontrolid', isAuthenticated, async(req, res) => {
+
+    const result = await OfficeControlsController.deletePatientOfficeControl(req.params.officecontrolid);
+
+    let msg = 'No office control was deleted';
+
+    if (result.result.n != 0) {
+
+        msg = 'Office control deleted';
+
+    }
+
+    res.status(201)
+    res.send({ 'msg': msg });
+})
+
 module.exports = router;

@@ -29,4 +29,17 @@ async function pushOfficeControl(officeControl) {
     return state;
   }
 
-  module.exports = { pushOfficeControl, getPatientOfficeControls }
+  async function deletePatientOfficeControl(officecontrolid){
+
+    const mongoClient = await connection.getConnection();
+
+    const state = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .deleteOne({ _id: new mongo.ObjectID(officecontrolid) });
+
+    return state;
+
+  }
+
+  module.exports = { pushOfficeControl, getPatientOfficeControls, deletePatientOfficeControl }
