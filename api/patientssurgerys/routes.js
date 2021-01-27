@@ -14,7 +14,8 @@ router.post('/', isAuthenticated, async (req, res) => {
     pathologyid: req.body.pathologyid,
     medicid: req.body.medicid,
     date: dateConverter.dateConverter(req.body.date),
-    description: req.body.description
+    description: req.body.description,
+    filePath: req.body.filePath
   });
 
   let msg = 'No surgery was created for the patient';
@@ -60,7 +61,7 @@ router.delete('/:surgeryid', isAuthenticated, async(req, res) => {
 //Route to modify a  patient surgery
 router.put('/:surgeryid', isAuthenticated, async (req, res) => {
 
-  const { patientid, typeofsurgeryid, pathologyid, medicid, date, description } = req.body;
+  const { patientid, typeofsurgeryid, pathologyid, medicid, date, description, filePath } = req.body;
 
   let surgeryid = req.params.surgeryid;
 
@@ -71,6 +72,7 @@ router.put('/:surgeryid', isAuthenticated, async (req, res) => {
     "medicid": medicid,
     "date": dateConverter.dateConverter(date),
     "description": description,
+    "file": filePath,
   }
 
   const stateResponse = await PatientSurgerysController.updatePatientSurgery(surgeryid, newData);
