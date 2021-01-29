@@ -18,6 +18,7 @@ const officecontrols = require('./officecontrols/routes');
 const typeofstudys = require('./typeofstudys/routes');
 const laboratorys = require('./laboratorys/routes');
 const studys = require('./studys/routes');
+const studysFiles = require('./studysfiles/routes');
 
 router.use('/medics', medics);
 router.use('/hospitals', hospitals);
@@ -36,6 +37,7 @@ router.use('/officecontrols', officecontrols);
 router.use('/typeofstudys', typeofstudys);
 router.use('/laboratorys', laboratorys);
 router.use('/studys', studys);
+router.use('/studysfiles', studysFiles);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
