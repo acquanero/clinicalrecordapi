@@ -26,4 +26,14 @@ router.post('/', isAuthenticated, async (req, res) => {
 
 });
 
+//Route to gel list of type of studies
+
+router.get('/', isAuthenticated, async (req, res) => {
+
+    const supplys = await TypeOfStudysController.getTypeOfStudys();
+    res.send(supplys);
+
+})
+
+
 module.exports = router;

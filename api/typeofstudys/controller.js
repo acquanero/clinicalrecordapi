@@ -18,4 +18,16 @@ async function pushTypeOfStudy(typeOfStudy) {
 
   }
 
-  module.exports = { pushTypeOfStudy };
+  async function getTypeOfStudys() {
+    const mongoClient = await connection.getConnection();
+    const typeOfStudys = await mongoClient
+      .db(connection.clinicalRecordDb)
+      .collection(COLLECTION_NAME)
+      .find()
+      .toArray();
+    await mongoClient.close();
+  
+    return typeOfStudys;
+  }
+
+  module.exports = { pushTypeOfStudy, getTypeOfStudys };
