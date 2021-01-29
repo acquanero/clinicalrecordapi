@@ -58,5 +58,20 @@ router.put('/:typeofstudyid', isAuthenticated, async (req, res) => {
 
 })
 
+//endpoint to delete a type of study
+router.delete('/:typeofstudyid', isAuthenticated, async (req, res) => {
+
+    const result = await TypeOfStudysController.deleteTypeOfStudy(req.params.typeofstudyid);
+
+    let msg = 'No evolutype of study was deleted';
+
+    if (result.result.n != 0) {
+
+        msg = 'Type of study deleted';
+
+    }
+    res.send({ 'msg': msg });
+});
+
 
 module.exports = router;

@@ -52,4 +52,17 @@ async function pushTypeOfStudy(typeOfStudy) {
     return result;
   }
 
-  module.exports = { pushTypeOfStudy, getTypeOfStudys, putTypeOfStudy };
+  async function deleteTypeOfStudy(typeofstudyid){
+
+    const mongoClient = await connection.getConnection();
+
+    const state = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .deleteOne({ _id: new mongo.ObjectID(typeofstudyid) });
+
+    return state;
+
+  }
+
+  module.exports = { pushTypeOfStudy, getTypeOfStudys, putTypeOfStudy, deleteTypeOfStudy };

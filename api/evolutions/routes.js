@@ -55,8 +55,6 @@ router.delete('/:evolutionid', isAuthenticated, async (req, res) => {
         msg = 'Evolution deleted';
 
     }
-
-    res.status(201)
     res.send({ 'msg': msg });
 });
 
