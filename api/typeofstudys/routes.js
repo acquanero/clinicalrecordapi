@@ -35,5 +35,28 @@ router.get('/', isAuthenticated, async (req, res) => {
 
 })
 
+//modify type of study name
+
+router.put('/:typeofstudyid', isAuthenticated, async (req, res) => {
+
+    let id = req.params.typeofstudyid;
+
+    const { name } = req.body;
+
+    const result = await TypeOfStudysController.putTypeOfStudy(id, name);
+
+    let myResponse = { "msg": "No type of study was modifyed" }
+
+    if (result.result.n != 0) {
+
+        myResponse = { "msg": "The type of study name was modifyed" }
+
+    }
+
+    res.send(myResponse);
+
+
+})
+
 
 module.exports = router;
