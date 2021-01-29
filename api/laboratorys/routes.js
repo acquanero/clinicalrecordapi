@@ -33,4 +33,32 @@ router.post('/', isAuthenticated, async (req, res) => {
 
 })
 
+//endpoint to get list of patient laboratories
+
+router.get('/:patientid', isAuthenticated, async(req, res) =>{
+
+    const laboratorys = await LaboratorysController.getLaboratorys(req.params.patientid);
+
+    res.send(laboratorys);
+
+})
+
+//endpoint to delete patient laboratory
+
+router.delete('/:laboratoryid', isAuthenticated, async(req, res) => {
+
+    const result = await LaboratorysController.deleteLaboratory(req.params.laboratoryid);
+
+    let msg = 'No laboratory was deleted';
+
+    if (result.result.n != 0) {
+
+        msg = 'The laboratory was deleted';
+
+    }
+    res.send({ 'msg': msg });
+
+
+})
+
 module.exports = router;

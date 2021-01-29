@@ -16,4 +16,35 @@ async function pushLaboratory(laboratory) {
     return state;
   }
 
-  module.exports = { pushLaboratory  };
+  async function getLaboratorys(recivedIdPatient){
+
+    const mongoClient = await connection.getConnection();
+
+    const state = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .find({ patientid: recivedIdPatient})
+    .toArray();
+    await mongoClient.close();
+
+    return state;
+
+  }
+
+  async function deleteLaboratory(laboratoryid){
+
+    const mongoClient = await connection.getConnection();
+
+    const state = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .deleteOne({_id: new mongo.ObjectID(laboratoryid)})
+
+    await mongoClient.close();
+
+    return state;
+
+  }
+
+
+  module.exports = { pushLaboratory, getLaboratorys, deleteLaboratory };
