@@ -16,6 +16,7 @@ const evolutions = require('./evolutions/routes');
 const biopsys = require('./biopsys/routes');
 const officecontrols = require('./officecontrols/routes');
 const typeofstudys = require('./typeofstudys/routes');
+const laboratorys = require('./laboratorys/routes');
 
 router.use('/medics', medics);
 router.use('/hospitals', hospitals);
@@ -32,6 +33,7 @@ router.use('/evolutions', evolutions);
 router.use('/biopsys', biopsys);
 router.use('/officecontrols', officecontrols);
 router.use('/typeofstudys', typeofstudys);
+router.use('/laboratorys', laboratorys);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
