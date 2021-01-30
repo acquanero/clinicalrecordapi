@@ -9,13 +9,14 @@ const LaboratorysController = require('./controller')
 //endpoint to creat a patient laboratory
 router.post('/', isAuthenticated, async (req, res) => {
 
-    const { patientid, date, description } = req.body;
+    const { patientid, date, description, urlstofiles } = req.body;
 
     const newLaboratory = {
 
         "patientid": patientid,
         "date": dateConverter.dateConverter(date),
-        "description": description
+        "description": description,
+        "urlstofiles": urlstofiles
     };
 
     const result = await LaboratorysController.pushLaboratory(newLaboratory);

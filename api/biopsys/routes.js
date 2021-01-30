@@ -7,13 +7,14 @@ const BiopsysController = require('./controller')
 //endpoint to creat a patient biopsy
 router.post('/', isAuthenticated, async (req, res) => {
 
-    const { patientid, date, description } = req.body;
+    const { patientid, date, description, urlstofiles } = req.body;
 
     const newBiopsy = {
 
         "patientid": patientid,
         "date": dateConverter.dateConverter(date),
-        "description": description
+        "description": description,
+        "urlstofiles": urlstofiles
     };
 
     const result = await BiopsysController.pushBiopsy(newBiopsy);
