@@ -205,4 +205,148 @@ router.put('/discharge/:patientid', isAuthenticated, async(req,res)=> {
 
 })
 
+//Route to create a new patient surgery
+router.post('/', isAuthenticated, async (req, res) => {
+
+  const newSurgery = await PatientSurgerysController.pushPatientSurgery({
+    patientid: req.body.patientid,
+    typeofsurgeryid: req.body.typeofsurgeryid,
+    pathologyid: req.body.pathologyid,
+    medicid: req.body.medicid,
+    date: dateConverter.dateConverter(req.body.date),
+    description: req.body.description,
+    filePath: req.body.filePath
+  });
+
+  let msg = 'No surgery was created for the patient';
+
+  if (newSurgery.result.n != 0) {
+
+    msg = 'New patient surgery created succesfully';
+
+  }
+
+  res.status(201)
+  res.send({ 'msg': msg });
+
+});
+
+//Route to get list of one patient surgerys
+
+router.get('/:patientid', isAuthenticated, async(req, res) => {
+
+  const surgerys = await PatientSurgerysController.getPatientSurgerys(req.params.patientid);
+
+  res.send(surgerys);
+
+})
+
+//Route to delete patient surgery
+router.delete('/:surgeryid', isAuthenticated, async(req, res) => {
+
+  const result = await PatientSurgerysController.deletePatientSurgery(req.params.surgeryid);
+
+  let myResponse = {"msg": "No surgery was deleted"}
+
+  if (result.result.n != 0){
+
+    myResponse = {"msg": "The surgery was deleted"}
+
+  }
+
+  res.send(myResponse);
+
+})
+
+//Route to modify a  patient surgery
+router.put('/:surgeryid', isAuthenticated, async (req, res) => {
+
+  const { patientid, typeofsurgeryid, pathologyid, medicid, date, description, filePath } = req.body;
+
+  let surgeryid = req.params.surgeryid;
+
+  const newData = {
+    "patientid": patientid,
+    "typeofsurgeryid": typeofsurgeryid,
+    "pathologyid": pathologyid,
+    "medicid": medicid,
+    "date": dateConverter.dateConverter(date),
+    "description": description,
+    "file": filePath,
+  }
+
+  const stateResponse = await PatientSurgerysController.updatePatientSurgery(surgeryid, newData);
+
+  let msg = 'No surgery was modify';
+
+  if (stateResponse.result.n != 0) {
+
+    msg = 'The patients surgery was modifyed';
+
+  }
+
+  res.status(201)
+  res.send({ 'msg': msg });
+
+});
+
+
+//Endpoint to perfom CRUD of one patient diseases
+
+//Route to add a disease to a patient
+router.post('/adddisease/:patientid', isAuthenticated, async (req, res) => {
+
+  const { diseaseid } = req.body;
+
+  const newPatientDisease = await PatientsController.pushPatientDisease({
+
+    diseaseid: diseaseid,
+    patientid: req.params.patientid,
+
+  });
+
+  let msg = 'No patient disease was added';
+
+  if (newPatientDisease.result.n != 0) {
+
+    msg = 'New patient disease added';
+
+  }
+
+  res.status(201)
+  res.send({ 'msg': msg });
+
+});
+
+//Route to get the list of diseases from a patient
+
+router.get('/getdiseases/:patientid', isAuthenticated, async(req, res) => {
+
+  const result = await PatientsController.getPatientDiseases(req.params.patientid);
+
+  res.send(result);
+
+
+});
+
+//route to delete disease from patient
+
+router.delete('/deletedisease/:patientid', isAuthenticated, async(req, res) => {
+
+  const { diseaseid } = req.body;
+
+  const result = await PatientsController.deletePatientDisease(req.params.patientid, diseaseid);
+
+  let msg = 'No disease was deleted';
+
+  if (result.result.n != 0) {
+
+    msg = 'The disease was deleted';
+
+  }
+
+  res.send({ 'msg': msg });
+
+});
+
 module.exports = router;

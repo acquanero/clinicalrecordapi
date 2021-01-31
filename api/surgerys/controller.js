@@ -114,17 +114,11 @@ async function pushPatientSurgery(patientSurgery) {
         .db(connection.clinicalRecordDb)
         .collection(COLLECTION_WITH_SUPPLY_NAMES)
         .findOne(queryForNames)
-
-      console.log(oneSupply.name);
-
       arrayOfSurgerySupplysIdName.supplys.push(oneSupply.name);
 
     }
 
-    console.log(arrayOfSurgerySupplysIdName);
-
     await mongoClient.close();
-
 
     return arrayOfSurgerySupplysIdName;
 
