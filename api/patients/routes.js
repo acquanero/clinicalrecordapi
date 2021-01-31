@@ -291,7 +291,7 @@ router.put('/:surgeryid', isAuthenticated, async (req, res) => {
 });
 
 
-//Endpoint to perfom CRUD of one patient diseases
+//Endpoints to perfom CRUD of one patient diseases
 
 //Route to add a disease to a patient
 router.post('/adddisease/:patientid', isAuthenticated, async (req, res) => {
@@ -342,6 +342,64 @@ router.delete('/deletedisease/:patientid', isAuthenticated, async(req, res) => {
   if (result.result.n != 0) {
 
     msg = 'The disease was deleted';
+
+  }
+
+  res.send({ 'msg': msg });
+
+});
+
+//Endpoints to perfom CRUD of one patient medications
+
+//Route to add a medication to a patient
+router.post('/addmedication/:patientid', isAuthenticated, async (req, res) => {
+
+  const { medicationid } = req.body;
+
+  const newPatientMedication = await PatientsController.pushPatientMedication({
+
+    medicationid: medicationid,
+    patientid: req.params.patientid,
+
+  });
+
+  let msg = 'No patient medication was added';
+
+  if (newPatientMedication.result.n != 0) {
+
+    msg = 'New patient medication added';
+
+  }
+
+  res.status(201)
+  res.send({ 'msg': msg });
+
+});
+
+//Route to get the list of medications from a patient
+
+router.get('/getmedications/:patientid', isAuthenticated, async(req, res) => {
+
+  const result = await PatientsController.getPatientMedications(req.params.patientid);
+
+  res.send(result);
+
+
+});
+
+//route to delete medication from patient
+
+router.delete('/deletemedication/:patientid', isAuthenticated, async(req, res) => {
+
+  const { medicationid } = req.body;
+
+  const result = await PatientsController.deletePatientMedication(req.params.patientid, medicationid);
+
+  let msg = 'No medication was deleted';
+
+  if (result.result.n != 0) {
+
+    msg = 'The medication was deleted';
 
   }
 
