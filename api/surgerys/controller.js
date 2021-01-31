@@ -114,7 +114,14 @@ async function pushPatientSurgery(patientSurgery) {
         .db(connection.clinicalRecordDb)
         .collection(COLLECTION_WITH_SUPPLY_NAMES)
         .findOne(queryForNames)
-      arrayOfSurgerySupplysIdName.supplys.push(oneSupply.name);
+
+        let mySupplyObject = {}
+
+        mySupplyObject.id = oneSupply._id
+        mySupplyObject.name = oneSupply.name;
+
+
+      arrayOfSurgerySupplysIdName.supplys.push(mySupplyObject);
 
     }
 
