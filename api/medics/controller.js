@@ -1,7 +1,15 @@
 const mongo = require('mongodb');
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 const connection = require('../../dbconnection/dbclient');
 
 const COLLECTION_NAME = 'medics'; // variable para no repetir la colección
+
+const signToken = (_id) => {
+  return jwt.sign({ _id }, process.env.JWT_SECRET, {
+    expiresIn: 60 * 60 * 24 * 365,
+  });
+};
 
 async function getMedics() {
     const mongoClient = await connection.getConnection();
@@ -74,17 +82,51 @@ async function checkMedicExistence(wantedMail){
 
 }
 
-async function pushMedic(medico) {
+
+//Function to register a new medic
+
+async function registerMedic(medicObject) {
+
+  const name = medicObject.name;
+  const surname = medicObject.surname;
+  const mdNumber = medicObject.mdNumber;
+  const mail = medicObject.mail;
+  const password = medicObject.password;
+  const admin = medicObject.admin;
+  const active = medicObject.active;
 
   const mongoClient = await connection.getConnection();
+  const medicsCollection = await mongoClient.db(connection.clinicalRecordDb).collection(COLLECTION_NAME);
 
-  const state = await mongoClient
-    .db(connection.clinicalRecordDb)
-    .collection(COLLECTION_NAME)
-    .insertOne(medico);
-  await mongoClient.close();
+  const randomKey = await crypto.randomBytes(16);
+  const newSalt = randomKey.toString('base64');
+  const encryptedPassword = crypto.pbkdf2Sync(password, newSalt, 10000, 64, 'sha1').toString('base64');
 
-  return state;
+  const registeredMail = await medicsCollection.findOne({ mail });
+
+   const response = {
+    msg: 'The user already exists',
+   };
+
+  if (!registeredMail) {
+    await medicsCollection.insertOne({
+      name,
+      surname,
+      mdNumber,
+      mail,
+      password: encryptedPassword,
+      salt: newSalt,
+      admin,
+      active
+    });
+
+     response.msg = 'User registration successful';
+
+   }
+
+   await mongoClient.close();
+
+  return response;
 }
 
 async function activateMedic(medicid) {
@@ -167,4 +209,4 @@ async function updateMedic(medicid, newData) {
 }
 
 
-module.exports = { getMedics, pushMedic, checkMedicExistence, activateMedic, deactivateMedic, getMedic, medicLogin, deleteMedic, updateMedic};
+module.exports = { getMedics, registerMedic, checkMedicExistence, activateMedic, deactivateMedic, getMedic, medicLogin, deleteMedic, updateMedic};

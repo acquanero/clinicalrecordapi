@@ -49,9 +49,30 @@ router.get('/data', isAuthenticated, async (req, res) => {
 
 });
 
+//Route to create a new medic
+router.post('/register', isAuthenticated, async (req, res) => {
+
+  const { name, surname, mdNumber, mail, password } = req.body;
+
+  const newMedic = await MedicosController.registerMedic({
+    name,
+    surname,
+    mdNumber,
+    mail,
+    password,
+    admin: false,
+    active: false
+  });
+
+  res.status(201)
+  res.send(newMedic);
+
+});
+
 
 //Route to create a new medic
 router.post('/', isAuthenticated, async (req, res) => {
+
   const { name, surname, mdNumber, mail, password } = req.body;
 
   //Check if an user with that email exists
@@ -74,7 +95,7 @@ router.post('/', isAuthenticated, async (req, res) => {
 
     try {
 
-      const newMedic = await MedicosController.pushMedic({
+      const newMedic = await MedicosController.registerMedic({
         name,
         surname,
         mdNumber,
