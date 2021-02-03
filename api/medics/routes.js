@@ -17,7 +17,7 @@ router.post('/login', isAuthenticated, async (req, res) => {
 
   const {mail, password } = req.body;
 
-  const myresponse = await MedicosController.medicLogin(mail, password);
+  const myresponse = await MedicosController.login(mail, password);
 
   res.send(myresponse);
 

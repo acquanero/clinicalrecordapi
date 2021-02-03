@@ -5,12 +5,6 @@ const connection = require('../../dbconnection/dbclient');
 
 const COLLECTION_NAME = 'medics'; // variable para no repetir la colección
 
-const signToken = (_id) => {
-  return jwt.sign({ _id }, process.env.JWT_SECRET, {
-    expiresIn: 60 * 60 * 24 * 365,
-  });
-};
-
 async function getMedics() {
     const mongoClient = await connection.getConnection();
     const medicosCollection = await mongoClient
@@ -62,25 +56,52 @@ async function getMedics() {
     return myResponse;
   }
 
-async function checkMedicExistence(wantedMail){
 
-  const mongoClient = await connection.getConnection();
+  async function login(mail, password) {
+    const mongoClient = await connection.getConnection();
 
-  const medicWanted = await mongoClient
-  .db(connection.clinicalRecordDb)
-  .collection(COLLECTION_NAME)
-  .findOne({ mail: wantedMail });
-  await mongoClient.close();
+    const dataBase = await mongoClient.db(connection.clinicalRecordDb);
 
-  if (medicWanted != null){
-    rta = true
-  } else {
-    rta = false
+    const medic = await dataBase.collection(COLLECTION_NAME).findOne({ mail });
+
+    if (!medic) {
+      return {"msg": "Wrong user or password"};
+    }
+
+    const response = await verifyCredentials(medic, password);
+
+    await mongoClient.close();
+  
+    return response;
   }
 
-  return rta;
+  //Function to verify user password
 
-}
+  function verifyCredentials(medic, password) {
+
+    let data = {
+      msg: 'Wrong user or password',
+    };
+
+    const encryptedPassword = crypto.pbkdf2Sync(password, medic.salt, 10000, 64, 'sha1').toString('base64');
+
+    if (medic.password === encryptedPassword) {
+      data = {
+        msg: 'User found',
+        token: signToken(medic._id),
+      };
+    }
+  
+    return data;
+  }
+
+  //Function to return the token using the medic id
+
+  const signToken = (_id) => {
+    return jwt.sign({ _id }, process.env.JWT_SECRET, {
+      expiresIn: 60 * 60 * 24 * 365,
+    });
+  };
 
 
 //Function to register a new medic
@@ -209,4 +230,4 @@ async function updateMedic(medicid, newData) {
 }
 
 
-module.exports = { getMedics, registerMedic, checkMedicExistence, activateMedic, deactivateMedic, getMedic, medicLogin, deleteMedic, updateMedic};
+module.exports = { getMedics, registerMedic, activateMedic, deactivateMedic, getMedic, login, deleteMedic, updateMedic};
