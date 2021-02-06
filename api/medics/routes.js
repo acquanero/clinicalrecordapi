@@ -13,7 +13,7 @@ router.get('/', isAuthenticated, async (req, res) => {
 });
 
 //Route to medic log in
-router.post('/login', isAuthenticated, async (req, res) => {
+router.post('/login', async (req, res) => {
 
   const {mail, password } = req.body;
 
@@ -50,7 +50,7 @@ router.get('/data', isAuthenticated, async (req, res) => {
 });
 
 //Route to create a new medic
-router.post('/register', isAuthenticated, async (req, res) => {
+router.post('/register', async (req, res) => {
 
   const { name, surname, mdNumber, mail, password } = req.body;
 

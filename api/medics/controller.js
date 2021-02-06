@@ -58,11 +58,13 @@ async function getMedics() {
 
 
   async function login(mail, password) {
+
     const mongoClient = await connection.getConnection();
 
-    const dataBase = await mongoClient.db(connection.clinicalRecordDb);
-
-    const medic = await dataBase.collection(COLLECTION_NAME).findOne({ mail });
+    const medic = await mongoClient
+    .db(connection.clinicalRecordDb)
+    .collection(COLLECTION_NAME)
+    .findOne({mail});
 
     if (!medic) {
       return {"msg": "Wrong user or password"};
